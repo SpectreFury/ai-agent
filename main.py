@@ -1,8 +1,11 @@
 import os
+import json
 import argparse
 from dotenv import load_dotenv
 from openai import OpenAI
 from chat import generate_content
+from prompts import SYSTEM_PROMPT
+from functions.call_function import call_function
 
 load_dotenv()
 
@@ -19,7 +22,10 @@ if not API_KEY:
 
 client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=API_KEY)
 
-messages = [{"role": "user", "content": user_prompt}]
+messages = [
+    {"role": "system", "content": SYSTEM_PROMPT},
+    {"role": "user", "content": user_prompt},
+]
 
 response = generate_content(client, messages)
 
@@ -31,4 +37,13 @@ if verbose:
     print("Prompt token: ", response.usage.prompt_tokens)
     print("Prompt token: ", response.usage.completion_tokens)
 
-print(response.choices[0].message.content)
+message = response.choices[0].message
+
+if not message.tool_calls:
+    print(message.content)
+
+for tool_call in message.tool_calls:
+    result = call_function(tool_call, verbose)
+
+    if verbose:
+        print(f"-> {result["content"]}")

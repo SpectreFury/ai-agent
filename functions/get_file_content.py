@@ -2,6 +2,22 @@ import os
 
 MAX_CHARS = 10000
 
+schema_get_file_content = {
+    "type": "function",
+    "function": {
+        "name": "get_file_content",
+        "description": "Reads file content from the provided file path in a given working directory",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "The file path from which the content is supposed to be read",
+                }
+            },
+        },
+    },
+}
 
 def get_file_content(working_directory: str, file_path: str):
     try:

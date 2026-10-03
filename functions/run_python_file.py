@@ -1,6 +1,27 @@
 import os
 import subprocess
 
+schema_run_python_file = {
+    "type": "function",
+    "function": {
+        "name": "run_python_file",
+        "description": "Execute a python file given the file path and optional argument in a working directory",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "The path of the python file that is to be run in a given working directory",
+                },
+                "args": {
+                    "type": "list[string]",
+                    "description": "Optional list of arguments to execute the file with in a given working directory (default is None).",
+                },
+            },
+        },
+    },
+}
+
 def run_python_file(
     working_directory: str, file_path: str, args: list[str] | None = None
 ):
@@ -39,5 +60,3 @@ def run_python_file(
 
     except:
         return f"Got some error"
-
-print(run_python_file("calculator", "main.py"))

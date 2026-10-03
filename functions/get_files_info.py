@@ -1,5 +1,22 @@
 import os
 
+schema_get_files_info = {
+    "type": "function",
+    "function": {
+        "name": "get_files_info",
+        "description": "Lists files in a specified directory relative to a working directory, providing file size and directory status",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "directory": {
+                    "type": "string",
+                    "description": "Directory path to list files from, relative to the working directory (default is the working directory itself)",
+                }
+            },
+        },
+    },
+}
+
 
 def get_files_info(working_directory: str, directory: str = "."):
     try:
@@ -12,9 +29,7 @@ def get_files_info(working_directory: str, directory: str = "."):
         is_valid_path = os.path.commonpath([abs_path, target_dir]) == abs_path
 
         if not is_valid_path:
-            return (
-                f"Cannot list {directory} as it is outside thte permitted working directory"
-            )
+            return f"Cannot list {directory} as it is outside thte permitted working directory"
 
         # Iterate over the files
 
@@ -29,4 +44,3 @@ def get_files_info(working_directory: str, directory: str = "."):
 
     except:
         return f"Error: some error occured"
-
