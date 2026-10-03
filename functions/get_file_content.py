@@ -36,8 +36,6 @@ def get_file_content(working_directory: str, file_path: str):
 
         with open(file_path, "r", encoding="utf-8") as file:
             file_output = file.read(MAX_CHARS)
-            print("Length: ", len(file_output))
-            print("Content: ", file_output)
 
             if file.read(1):
                 file_output += (

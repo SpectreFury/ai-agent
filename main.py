@@ -27,23 +27,28 @@ messages = [
     {"role": "user", "content": user_prompt},
 ]
 
-response = generate_content(client, messages)
+for _ in range(20):
+    response = generate_content(client, messages)
 
-if not response.usage:
-    raise RuntimeError("Request failed")
-
-if verbose:
-    print(f"User prompt: {user_prompt}")
-    print("Prompt token: ", response.usage.prompt_tokens)
-    print("Prompt token: ", response.usage.completion_tokens)
-
-message = response.choices[0].message
-
-if not message.tool_calls:
-    print(message.content)
-
-for tool_call in message.tool_calls:
-    result = call_function(tool_call, verbose)
+    if not response.usage:
+        raise RuntimeError("Request failed")
 
     if verbose:
-        print(f"-> {result["content"]}")
+        print(f"User prompt: {user_prompt}")
+        print("Prompt token: ", response.usage.prompt_tokens)
+        print("Completion token: ", response.usage.completion_tokens)
+
+    message = response.choices[0].message
+
+    messages.append(message)
+
+    if not message.tool_calls:
+        print(message.content)
+        break
+
+    for tool_call in message.tool_calls:
+        result = call_function(tool_call, verbose)
+        messages.append(result)
+
+        if verbose:
+            print(f"-> {result["content"]}")
