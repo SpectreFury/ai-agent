@@ -5,7 +5,7 @@ from pkg.calculator import Calculator
 from pkg.render import format_json_output
 
 
-main() -> None:
+def main() -> None:
     calculator = Calculator()
     if len(sys.argv) <= 1:
         print("Calculator App")
