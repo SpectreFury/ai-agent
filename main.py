@@ -16,11 +16,17 @@ args = parser.parse_args()
 user_prompt = str(args.user_prompt)
 verbose = args.verbose
 
-API_KEY = os.getenv("OPENROUTER_API_KEY")
-if not API_KEY:
-    raise RuntimeError("OPENROUTER_API_KEY was not found!")
+API_KEY = os.getenv("LLM_API_KEY")
+BASE_URL = os.getenv("BASE_URL")
 
-client = OpenAI(base_url="https://openrouter.ai/api/v1", api_key=API_KEY)
+if not API_KEY:
+    raise RuntimeError("LLM_API_KEY was not found!")
+
+if not BASE_URL:
+    raise RuntimeError("BAE_URL was not found!")
+
+
+client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
 
 messages = [
     {"role": "system", "content": SYSTEM_PROMPT},
