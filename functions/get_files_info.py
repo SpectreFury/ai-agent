@@ -20,8 +20,6 @@ schema_get_files_info = {
 
 def get_files_info(working_directory: str, directory: str = "."):
     try:
-        if not os.path.isdir(directory):
-            return f"Error: {directory} is not a directory"
 
         abs_path = os.path.abspath(working_directory)
 
@@ -29,7 +27,10 @@ def get_files_info(working_directory: str, directory: str = "."):
         is_valid_path = os.path.commonpath([abs_path, target_dir]) == abs_path
 
         if not is_valid_path:
-            return f"Cannot list {directory} as it is outside thte permitted working directory"
+            return f"Cannot list {directory} as it is outside the permitted working directory"
+
+        if not os.path.isdir(target_dir):
+            return f"Error: {directory} is not a directory"
 
         # Iterate over the files
 

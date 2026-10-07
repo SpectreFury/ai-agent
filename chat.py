@@ -11,12 +11,22 @@ from functions.get_files_info import schema_get_files_info
 from functions.run_python_file import schema_run_python_file
 from functions.write_file import schema_write_file
 
-load_dotenv();
+_ = load_dotenv();
 
 MODEL = os.getenv("MODEL")
+API_KEY = os.getenv("LLM_API_KEY")
+BASE_URL = os.getenv("BASE_URL")
 
 if not MODEL:
-    raise RuntimeError("MODEL was not found")
+    raise RuntimeError("MODEL was not found!")
+
+if not API_KEY:
+    raise RuntimeError("LLM_API_KEY was not found!")
+
+if not BASE_URL:
+    raise RuntimeError("BAE_URL was not found!")
+
+client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
 
 available_functions = [
     schema_get_files_info,
@@ -26,7 +36,7 @@ available_functions = [
 ]
 
 
-def generate_content(client: OpenAI, messages: Iterable[ChatCompletionMessageParam]):
+def generate_content(messages: Iterable[ChatCompletionMessageParam]):
     response = client.chat.completions.create(
         model=MODEL, messages=messages, tools=available_functions
     )

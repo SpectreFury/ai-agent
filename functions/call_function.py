@@ -33,7 +33,7 @@ def call_function(tool_call: ChatCompletionMessageToolCallUnion, verbose: bool =
 
     # If function was found, we need to call it
 
-    arguments["working_directory"] = "calculator"
+    arguments["working_directory"] = "."
 
     func = function_map[name]
     result = func(**arguments)

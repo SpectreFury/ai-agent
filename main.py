@@ -1,8 +1,5 @@
-import os
-import json
 import argparse
 from dotenv import load_dotenv
-from openai import OpenAI
 from chat import generate_content
 from prompts import SYSTEM_PROMPT
 from functions.call_function import call_function
@@ -16,25 +13,13 @@ args = parser.parse_args()
 user_prompt = str(args.user_prompt)
 verbose = args.verbose
 
-API_KEY = os.getenv("LLM_API_KEY")
-BASE_URL = os.getenv("BASE_URL")
-
-if not API_KEY:
-    raise RuntimeError("LLM_API_KEY was not found!")
-
-if not BASE_URL:
-    raise RuntimeError("BAE_URL was not found!")
-
-
-client = OpenAI(base_url=BASE_URL, api_key=API_KEY)
-
 messages = [
     {"role": "system", "content": SYSTEM_PROMPT},
     {"role": "user", "content": user_prompt},
 ]
 
 for _ in range(20):
-    response = generate_content(client, messages)
+    response = generate_content(messages)
 
     if not response.usage:
         raise RuntimeError("Request failed")
